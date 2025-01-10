@@ -52,21 +52,13 @@ if (CMAKE_BUILD_TYPE MATCHES Release)
     add_compile_definitions(MLTN_BUILD_TYPE_RELEASE)
 endif ()
 
-# TODO: Metal for macOS only
-# Add libraries
-#find_package(Vulkan REQUIRED)
-#find_path(MVK_INCLUDE_DIR NAMES vulkan/vulkan.h PATH_SUFFIXES include)
-#find_library(MVK_LIBRARY NAMES MoltenVK PATH_SUFFIXES lib)
-
-# Debugging information
-#message(STATUS "Vulkan_INCLUDE_DIRS: ${Vulkan_INCLUDE_DIRS}")
-#message(STATUS "Vulkan_LIBRARIES: ${Vulkan_LIBRARIES}")
-#message(STATUS "MoltenVK Include Dir: ${MVK_INCLUDE_DIR}")
-#message(STATUS "MoltenVK Library: ${MVK_LIBRARY}")
-
 add_subdirectory(Molten/vendor/glfw)
 add_subdirectory(Molten/vendor/spdlog)
 #add_subdirectory(vendor/imgui)
+
+find_library(METAL_FRAMEWORK Metal)
+find_library(METALKIT_FRAMEWORK MetalKit)
+find_library(FOUNDATION_FRAMEWORK Foundation)
 
 # Set output directory for libraries
 set_target_properties(glfw PROPERTIES
@@ -78,7 +70,13 @@ set_target_properties(spdlog PROPERTIES
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE ${SOURCE_DIR}
+        PRIVATE Molten/vendor/metal-cpp
         PRIVATE Molten/vendor/glfw/include
         PRIVATE Molten/vendor/spdlog/include)
 
-target_link_libraries(${PROJECT_NAME} glfw spdlog)
+target_link_libraries(${PROJECT_NAME}
+        ${METAL_FRAMEWORK}
+        ${METALKIT_FRAMEWORK}
+        ${FOUNDATION_FRAMEWORK}
+        glfw
+        spdlog)
