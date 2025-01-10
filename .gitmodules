@@ -1,0 +1,6 @@
+[submodule "Molten/vendor/glfw"]
+	path = Molten/vendor/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "Molten/vendor/spdlog"]
+	path = Molten/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
