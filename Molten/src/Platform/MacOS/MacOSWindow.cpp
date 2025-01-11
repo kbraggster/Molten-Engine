@@ -60,6 +60,7 @@ void MacOSWindow::Init(const WindowProps& props)
         WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     });
 
+    m_Context.Init();
 }
 
 void MacOSWindow::Shutdown()

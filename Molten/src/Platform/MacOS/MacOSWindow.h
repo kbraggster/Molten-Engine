@@ -2,6 +2,8 @@
 
 #include "Engine/Core/Window.h"
 
+#include "Platform/Metal/MetalContext.h"
+
 #include <GLFW/glfw3.h>
 
 class MacOSWindow : public Window
@@ -35,4 +37,5 @@ class MacOSWindow : public Window
     };
 
     WindowData m_Data;
+    MetalContext m_Context;
 };

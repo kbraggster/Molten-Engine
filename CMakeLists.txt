@@ -27,7 +27,7 @@ file(GLOB_RECURSE SOURCE_FILES "${SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE HEADER_FILES "${INCLUDE_DIR}/*.h")
 
 # Create executable
-add_executable("${PROJECT_NAME}" ${SOURCE_FILES} ${HEADER_FILES})
+add_executable("${PROJECT_NAME}" ${SOURCE_FILES})
 
 # Set output directory
 set(TargetDir ${TargetDir}/${PROJECT_NAME})
@@ -56,9 +56,6 @@ add_subdirectory(Molten/vendor/glfw)
 add_subdirectory(Molten/vendor/spdlog)
 #add_subdirectory(vendor/imgui)
 
-find_library(METAL_FRAMEWORK Metal)
-find_library(METALKIT_FRAMEWORK MetalKit)
-find_library(FOUNDATION_FRAMEWORK Foundation)
 
 # Set output directory for libraries
 set_target_properties(glfw PROPERTIES
@@ -75,8 +72,8 @@ target_include_directories(${PROJECT_NAME}
         PRIVATE Molten/vendor/spdlog/include)
 
 target_link_libraries(${PROJECT_NAME}
-        ${METAL_FRAMEWORK}
-        ${METALKIT_FRAMEWORK}
-        ${FOUNDATION_FRAMEWORK}
+        "-framework Metal"
+        "-framework Foundation"
+        "-framework QuartzCore"
         glfw
         spdlog)
