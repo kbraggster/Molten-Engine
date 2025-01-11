@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Metal/Metal.hpp>
+#include "MetalDevice.h"
 
 #include "Engine/Renderer/GraphicsContext.h"
+
 
 class MetalContext : public GraphicsContext
 {
@@ -13,6 +14,5 @@ class MetalContext : public GraphicsContext
     void Init() override;
 
   private:
-    MTL::Device* m_Device             = nullptr;
-    MTL::CommandQueue* m_CommandQueue = nullptr;
+    std::unique_ptr<MetalDevice> m_Device;
 };
