@@ -12,7 +12,7 @@ MetalContext::~MetalContext()
 
 void MetalContext::Init()
 {
-    m_Device = std::make_unique<MetalDevice>();
+    m_Device.reset(new MetalDevice());
 
     m_MetalLayer = CA::MetalLayer::layer()->retain();
     m_MetalLayer->setDevice(m_Device->GetDevice());

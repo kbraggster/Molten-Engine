@@ -18,6 +18,6 @@ class MetalContext : public GraphicsContext
     MTL::Device* GetDevice() const { return m_Device->GetDevice(); }
 
   private:
-    std::unique_ptr<MetalDevice> m_Device;
+    Ref<MetalDevice> m_Device;
     CA::MetalLayer* m_MetalLayer = nullptr;
 };

@@ -13,7 +13,7 @@ class Application
     static Application& Get() { return *s_Instance; }
 
   private:
-    std::unique_ptr<Window> m_Window;
+    Ref<Window> m_Window;
     bool m_Running = true;
 
     static Application* s_Instance;
