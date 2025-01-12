@@ -1,5 +1,10 @@
 #include "MacOSWindow.h"
 
+#include "spdlog/fmt/bundled/color.h"
+
+#include <AppKit/AppKit.hpp>
+#include <Platform/Metal/Adapters/GLFWAdapter.h>
+
 static bool s_GLFWInitialized = false;
 
 static void GLFWErrorCallback(int error, const char* description)
@@ -28,7 +33,7 @@ void MacOSWindow::Init(const WindowProps& props)
     m_Data.Width  = props.Width;
     m_Data.Height = props.Height;
 
-    MLTN_CORE_INFO("Creating Window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+    MLTN_CORE_INFO("Creating Window: {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
     if (!s_GLFWInitialized)
     {
@@ -61,6 +66,9 @@ void MacOSWindow::Init(const WindowProps& props)
     });
 
     m_Context.Init();
+
+    NS::Window* nsWindow = GetNSWindow(m_Window, m_Context.GetMetalLayer())->retain();
+    m_CommandQueue       = m_Context.GetDevice()->newCommandQueue();
 }
 
 void MacOSWindow::Shutdown()
@@ -71,6 +79,32 @@ void MacOSWindow::Shutdown()
 void MacOSWindow::OnUpdate()
 {
     glfwPollEvents();
+
+    // Get the next drawable from the Metal layer
+    m_Drawable = m_Context.GetMetalLayer()->nextDrawable();
+
+    if (!m_Drawable)
+        MLTN_CORE_ERROR("Drawable is null!");
+
+    // Create a command buffer
+    MTL::CommandBuffer* commandBuffer = m_CommandQueue->commandBuffer();
+
+    // Set up render pass descriptor
+    MTL::RenderPassDescriptor* renderPass                     = MTL::RenderPassDescriptor::alloc()->init();
+    MTL::RenderPassColorAttachmentDescriptor* colorAttachment = renderPass->colorAttachments()->object(0);
+    colorAttachment->setTexture(m_Drawable->texture());
+    colorAttachment->setLoadAction(MTL::LoadActionClear);
+    colorAttachment->setClearColor(MTL::ClearColor(0.7f, 0.2f, 0.2f, 1.0f));
+    colorAttachment->setStoreAction(MTL::StoreActionStore);
+
+    // Begin encoding commands for rendering
+    MTL::RenderCommandEncoder* renderCommandEncoder = commandBuffer->renderCommandEncoder(renderPass);
+    renderCommandEncoder->endEncoding(); // No actual drawing, just clearing the color
+
+    // Present the drawable and commit the command buffer
+    commandBuffer->presentDrawable(m_Drawable);
+    commandBuffer->commit();
+    commandBuffer->waitUntilCompleted();
 }
 
 void MacOSWindow::SetVSync(const bool enabled)

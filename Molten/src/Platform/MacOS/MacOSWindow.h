@@ -4,7 +4,10 @@
 
 #include "Platform/Metal/MetalContext.h"
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_COCOA
+#include <GLFW/glfw3native.h>
 
 class MacOSWindow : public Window
 {
@@ -38,4 +41,6 @@ class MacOSWindow : public Window
 
     WindowData m_Data;
     MetalContext m_Context;
+    MTL::CommandQueue* m_CommandQueue;
+    CA::MetalDrawable* m_Drawable;
 };

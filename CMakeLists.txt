@@ -24,10 +24,11 @@ set(INCLUDE_DIR "Molten/src")
 
 # Recursively find source and header files
 file(GLOB_RECURSE SOURCE_FILES "${SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE OBJ_FILES "${SOURCE_DIR}/*.mm")
 file(GLOB_RECURSE HEADER_FILES "${INCLUDE_DIR}/*.h")
 
 # Create executable
-add_executable("${PROJECT_NAME}" ${SOURCE_FILES})
+add_executable("${PROJECT_NAME}" ${SOURCE_FILES} ${OBJ_FILES})
 
 # Set output directory
 set(TargetDir ${TargetDir}/${PROJECT_NAME})
@@ -37,6 +38,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${ObjDir}"
         LIBRARY_OUTPUT_DIRECTORY "${ObjDir}"
 )
+
+set_source_files_properties(${OBJ_FILES} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
 # Add precompiled header
 target_precompile_headers(${PROJECT_NAME} PRIVATE Molten/src/mltnpch.h)
