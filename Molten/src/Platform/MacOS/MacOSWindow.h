@@ -42,5 +42,4 @@ class MacOSWindow : public Window
     WindowData m_Data;
     MetalContext m_Context;
     MTL::CommandQueue* m_CommandQueue;
-    CA::MetalDrawable* m_Drawable;
 };

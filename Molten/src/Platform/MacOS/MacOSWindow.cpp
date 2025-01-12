@@ -81,9 +81,9 @@ void MacOSWindow::OnUpdate()
     glfwPollEvents();
 
     // Get the next drawable from the Metal layer
-    m_Drawable = m_Context.GetMetalLayer()->nextDrawable();
+    const CA::MetalDrawable* drawable = m_Context.GetMetalLayer()->nextDrawable();
 
-    if (!m_Drawable)
+    if (!drawable)
         MLTN_CORE_ERROR("Drawable is null!");
 
     // Create a command buffer
@@ -92,7 +92,7 @@ void MacOSWindow::OnUpdate()
     // Set up render pass descriptor
     MTL::RenderPassDescriptor* renderPass                     = MTL::RenderPassDescriptor::alloc()->init();
     MTL::RenderPassColorAttachmentDescriptor* colorAttachment = renderPass->colorAttachments()->object(0);
-    colorAttachment->setTexture(m_Drawable->texture());
+    colorAttachment->setTexture(drawable->texture());
     colorAttachment->setLoadAction(MTL::LoadActionClear);
     colorAttachment->setClearColor(MTL::ClearColor(0.7f, 0.2f, 0.2f, 1.0f));
     colorAttachment->setStoreAction(MTL::StoreActionStore);
@@ -102,7 +102,7 @@ void MacOSWindow::OnUpdate()
     renderCommandEncoder->endEncoding(); // No actual drawing, just clearing the color
 
     // Present the drawable and commit the command buffer
-    commandBuffer->presentDrawable(m_Drawable);
+    commandBuffer->presentDrawable(drawable);
     commandBuffer->commit();
     commandBuffer->waitUntilCompleted();
 }
