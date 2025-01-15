@@ -17,6 +17,6 @@ void MetalContext::Init()
     m_MetalLayer = CA::MetalLayer::layer()->retain();
     m_MetalLayer->setDevice(m_Device->GetDevice());
     m_MetalLayer->setPixelFormat(MTL::PixelFormat::PixelFormatBGRA8Unorm);
-    m_MetalLayer->setFramebufferOnly(false);
+    // TODO: Set drawable size to size of the window
     m_MetalLayer->setDrawableSize(CGSizeMake(1280, 720));
 }

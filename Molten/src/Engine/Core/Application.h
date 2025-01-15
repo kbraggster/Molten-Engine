@@ -13,7 +13,7 @@ class Application
     static Application& Get() { return *s_Instance; }
 
   private:
-    Ref<Window> m_Window;
+    Scope<Window> m_Window;
     bool m_Running = true;
 
     static Application* s_Instance;

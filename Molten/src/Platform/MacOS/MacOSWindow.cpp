@@ -99,7 +99,7 @@ void MacOSWindow::OnUpdate()
 
     // Begin encoding commands for rendering
     MTL::RenderCommandEncoder* renderCommandEncoder = commandBuffer->renderCommandEncoder(renderPass);
-    renderCommandEncoder->endEncoding(); // No actual drawing, just clearing the color
+    renderCommandEncoder->endEncoding();
 
     // Present the drawable and commit the command buffer
     commandBuffer->presentDrawable(drawable);

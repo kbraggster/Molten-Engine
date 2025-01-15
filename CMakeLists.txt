@@ -57,7 +57,7 @@ endif ()
 
 add_subdirectory(Molten/vendor/glfw)
 add_subdirectory(Molten/vendor/spdlog)
-#add_subdirectory(vendor/imgui)
+add_subdirectory(Molten/vendor/imgui)
 
 
 # Set output directory for libraries
@@ -67,16 +67,21 @@ set_target_properties(glfw PROPERTIES
 set_target_properties(spdlog PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY ${ObjDir}
         LIBRARY_OUTPUT_DIRECTORY ${ObjDir})
+set_target_properties(imgui PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY ${ObjDir}
+        LIBRARY_OUTPUT_DIRECTORY ${ObjDir})
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE ${SOURCE_DIR}
         PRIVATE Molten/vendor/metal-cpp
         PRIVATE Molten/vendor/glfw/include
-        PRIVATE Molten/vendor/spdlog/include)
+        PRIVATE Molten/vendor/spdlog/include
+        PRIVATE Molten/vendor/imgui)
 
 target_link_libraries(${PROJECT_NAME}
         "-framework Metal"
         "-framework Foundation"
         "-framework QuartzCore"
         glfw
-        spdlog)
+        spdlog
+        imgui)
